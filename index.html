@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICFAITech</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html, body {
+            height: 100%;
+            background: linear-gradient(to bottom, lightseagreen, palegreen, lightgoldenrodyellow);
+            color: darkslategray;
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            background: teal;
+            color: white;
+            text-align: center;
+            padding: 1em 0;
+            flex: 0 0 auto; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative; /* Added to contain the logo */
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+
+        .logo {
+            position: absolute;
+            top: 1em;
+            right: 1em;
+            cursor: pointer;
+        }
+        .main-content {
+            flex: 1 0 auto; 
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            padding: 2em;
+            background: inherit;
+        }
+
+        .left-content {
+            flex: 1;
+            background: mediumseagreen;
+            padding: 1em;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            color: white;
+        }
+
+        .right-content {
+            flex: 1;
+            background: peachpuff;
+            padding: 1em;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .footer {
+            background: teal;
+            color: white;
+            text-align: center;
+            padding: 1em 0;
+            flex: 0 0 auto; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Popup Styles */
+        #registration-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: none; /* Hidden by default */
+        }
+
+        #registration-popup h2 {
+            margin-top: 0;
+        }
+
+        #registration-popup label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        #registration-popup input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        #registration-popup button {
+            background-color: #5cb85c;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+          /* Overlay Styles */
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+            z-index: 999; /* Ensure it's above other content but below the popup */
+            display: none; /* Hidden by default */
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <h1>Welcome to ICFAITech</h1>
+        <img src="C:\Users\acer\OneDrive\Desktop\html\Screenshot 2025-02-06 134830.png" height="50" width="90" alt="ICFAITech Logo" class="logo" onclick="window.open('https://www.icfai.org/', '_blank')">
+    </header>
+
+    <div class="container main-content">
+        <div class="col-md-6 left-content">
+            <h2>Features</h2>
+            <ul class="list-group">
+                <li class="list-group-item">Best Academics</li>
+                <li class="list-group-item">Best Infrastructure</li>
+                <li class="list-group-item">Best Placements</li>
+            </ul>
+            <h2>Our Other Schools</h2>
+            <ol class="list-group list-group-numbered">
+                <li class="list-group-item">IBS</li>
+                <li class="list-group-item">Law School</li>
+            </ol>
+        </div>
+
+        <div class="col-md-6 right-content">
+            <h2>Login</h2>
+            <form class="needs-validation" novalidate>
+                <div class="mb-3">
+                    <label for="username" class="form-label">User Name:</label>
+                    <input type="text" class="form-control" id="username" required>
+                    <div class="invalid-feedback">Please enter your username.</div>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password:</label>
+                    <input type="password" class="form-control" id="password" required>
+                    <div class="invalid-feedback">Please enter your password.</div>
+                </div>
+                <a href="#" onclick="openRegistrationPopup()">New User? Register</a><br>
+                <button type="submit" class="btn btn-primary" onclick="validateLogin(event)">Submit</button>
+                <div id="error-message" class="error-message"></div>
+            </form>
+        </div>
+    </div>
+     <!-- The overlay -->
+    <div id="overlay"></div>
+
+    <!-- Registration Popup -->
+    <div id="registration-popup">
+        <h2>Register</h2>
+        <form>
+            <label for="reg-username">Username:</label>
+            <input type="text" id="reg-username" required><br>
+            <label for="reg-email">Email:</label>
+            <input type="email" id="reg-email" required><br>
+            <label for="reg-password">Password:</label>
+            <input type="password" id="reg-password" required><br>
+            <button type="button" onclick="submitRegistration()">Register</button>
+            <button type="button" onclick="closePopup()">Close</button>
+        </form>
+    </div>
+
+    <footer class="footer">
+        <marquee>This website is powered by Deekshith Mamidi</marquee>
+    </footer>
+
+    <script>
+function openRegistrationPopup() {
+    document.getElementById("registration-popup").style.display = "block";
+     document.getElementById("overlay").style.display = "block";
+}
+
+function closePopup() {
+    document.getElementById("registration-popup").style.display = "none";
+      document.getElementById("overlay").style.display = "none";
+}
+
+function submitRegistration() {
+    alert("Registration submitted successfully!");
+    closePopup();
+}
+
+function validateLogin(event) {
+    event.preventDefault();
+    const username = document.getElementById("username");
+    const password = document.getElementById("password");
+    const errorMessage = document.getElementById("error-message");
+    errorMessage.textContent = "";
+
+    if (!username.value || !password.value) {
+        errorMessage.textContent = "Error: Username and Password are required.";
+        return;
+    }
+
+    if (username.value.length < 4) {
+        errorMessage.textContent = "Error: Username must be at least 4 characters long.";
+        return;
+    }
+
+    if (password.value.length < 6) {
+        errorMessage.textContent = "Error: Password must be at least 6 characters long.";
+        return;
+    }
+
+    window.location.href = "students.html";
+}
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
